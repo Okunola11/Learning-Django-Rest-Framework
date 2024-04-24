@@ -6,26 +6,30 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from products.models import Product
+from products.serializers import ProductSerializer
 
 # Create your views here.
 
 
 @api_view(['GET'])
 def api_home(request, *args, **kwargs):
-    model_data = Product.objects.all().order_by(
+    instance = Product.objects.all().order_by(
         "?").first()  # returns a random instance of 'Product'
     data = {}
-    if model_data:
-        # data['id'] = model_data.id
-        # data['title'] = model_data.title
-        # data['content'] = model_data.content
-        # data['price'] = model_data.price
+    if instance:
+        # data['id'] = instance.id
+        # data['title'] = instance.title
+        # data['content'] = instance.content
+        # data['price'] = instance.price
 
         # built in method to avoid the manual process above, with options to select fields from the data
-        data = model_to_dict(model_data, fields=['id', 'title', 'sale_price'])
+        # data = model_to_dict(instance, fields=['id', 'title', 'sale_price'])
+
+        # Serializers does model_to_dict() function for us
+        data = ProductSerializer(instance).data
 
         # Serialization
-        # model instance (model_data)
+        # model instance (instance)
         # Turn to a Python dict()
         # Return JSON to my client
 
