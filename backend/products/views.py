@@ -8,18 +8,20 @@ from api.authentication import TokenAuthentication
 
 from .models import Product
 from .serializers import ProductSerializer
-from .permissions import IsStaffEditorPermission
+# from api.permissions import IsStaffEditorPermission
+from api.mixins import StaffEditorPermissionMixin
 
 
-class ProductListCreateApiView(generics.ListCreateAPIView):
+class ProductListCreateApiView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [
-        authentication.SessionAuthentication,
-        # authentication.TokenAuthentication, "use this to use 'Token' Keyword"
-        TokenAuthentication,
-    ]
-    permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
+    # authentication_classes = [
+    #     authentication.SessionAuthentication,
+    #     # authentication.TokenAuthentication, "use this to use 'Token' Keyword"
+    #     TokenAuthentication,
+    # ]
+    # permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
+    # Permission_classes is replaced by 'StaffEditorPermissionMixin'
 
     def perform_create(self, serializer):
         # print(serializer.validated_data)
@@ -30,7 +32,7 @@ class ProductListCreateApiView(generics.ListCreateAPIView):
         serializer.save(content=content)
 
 
-class ProductDetailApiView(generics.RetrieveAPIView):
+class ProductDetailApiView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # has a look_up field = pk 'Primary Key'
@@ -40,7 +42,7 @@ product_detail_view = ProductDetailApiView.as_view()
 # we can add this to our url or do as done for ProductListCreateApiView and add .as_view() to our urls file
 
 
-class ProductUpdateApiView(generics.UpdateAPIView):
+class ProductUpdateApiView(StaffEditorPermissionMixin, generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # lookup_field = 'pk'
@@ -54,7 +56,7 @@ class ProductUpdateApiView(generics.UpdateAPIView):
 product_update_view = ProductUpdateApiView.as_view()
 
 
-class ProductDestroyApiView(generics.DestroyAPIView):
+class ProductDestroyApiView(StaffEditorPermissionMixin, generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # has a look_up field = pk
