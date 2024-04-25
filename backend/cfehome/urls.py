@@ -19,4 +19,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
+    # instead of adding the pattern below, you can just include it in the 'api.urls' to have 'api/products/'
+    path('api/products/', include('products.urls')),
 ]
