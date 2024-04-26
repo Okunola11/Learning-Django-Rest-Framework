@@ -21,4 +21,5 @@ urlpatterns = [
     path('api/', include('api.urls')),
     # instead of adding the pattern below, you can just include it in the 'api.urls' to have 'api/products/'
     path('api/products/', include('products.urls')),
+    path('api/v2/', include('cfehome.routers')),
 ]
