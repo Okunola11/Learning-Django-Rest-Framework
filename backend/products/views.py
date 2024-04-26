@@ -9,10 +9,14 @@ from api.authentication import TokenAuthentication
 from .models import Product
 from .serializers import ProductSerializer
 # from api.permissions import IsStaffEditorPermission
-from api.mixins import StaffEditorPermissionMixin
+from api.mixins import StaffEditorPermissionMixin, UserQuerysetMixin
 
 
-class ProductListCreateApiView(StaffEditorPermissionMixin, generics.ListCreateAPIView):
+class ProductListCreateApiView(
+    UserQuerysetMixin,
+    StaffEditorPermissionMixin,
+    generics.ListCreateAPIView
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     # authentication_classes = [
@@ -29,7 +33,14 @@ class ProductListCreateApiView(StaffEditorPermissionMixin, generics.ListCreateAP
         content = serializer.validated_data.get('content')
         if content is None:
             content = title
-        serializer.save(content=content)
+        serializer.save(user=self.request.user, content=content)
+
+# Already doing the below from mixins:
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     request = self.request
+    #     print(request.user)
+    #     return queryset.filter(user=request.user)
 
 
 class ProductDetailApiView(StaffEditorPermissionMixin, generics.RetrieveAPIView):
