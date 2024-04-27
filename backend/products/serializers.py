@@ -20,10 +20,10 @@ class ProductInlineSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     owner = UserPublicSerializer(source='user', read_only=True)
-    related_products = ProductInlineSerializer(
-        source='user.product_set.all', read_only=True, many=True)
-    my_discount = serializers.SerializerMethodField(read_only=True)
-    my_user_data = serializers.SerializerMethodField(read_only=True)
+    # related_products = ProductInlineSerializer(
+    #     source='user.product_set.all', read_only=True, many=True)
+    # my_discount = serializers.SerializerMethodField(read_only=True)
+    # my_user_data = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='product-detail',
@@ -46,9 +46,9 @@ class ProductSerializer(serializers.ModelSerializer):
             'content',
             'price',
             'sale_price',
-            'my_user_data',
-            'my_discount',
-            'related_products',
+            # 'my_user_data',
+            # 'my_discount',
+            # 'related_products',
         ]
 
     # this is not the preferred method for serializing related field data. Create a new serializer as done

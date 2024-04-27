@@ -25,4 +25,13 @@ if auth_response.status_code == 200:
 
     print(get_response.json())
 
+    # This is after implementing pagination into search results
+    next_url = get_response.json()['next']
+    results = get_response.json()['results']
+    print(f'Next URL IS: {next_url}')
+    print(results)
+
+    # if next_url is not None:
+    #     endpoint = requests.get(next_url, headers=headers)
+
     # {'Authorization': f'Token {auth_response.json()['token']}'}
