@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import datetime
 import os
 from pathlib import Path
 import environ
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     # third party packages
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     # internal apps
     'api',
     'products',
@@ -135,6 +137,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 auth_classes = [
     'rest_framework.authentication.SessionAuthentication',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
     'api.authentication.TokenAuthentication',
 ]
 # if DEBUG:  # This is just for development. Set DEBUG=False for Production #This actually caused things to not work well
@@ -160,4 +163,11 @@ ALGOLIA = {
     'APPLICATION_ID': env('APPLICATION_ID'),
     'API_KEY': env('API_KEY'),
     'INDEX_PREFIX': 'waasi'
+}
+
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": ['Bearer'],
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(seconds=120),  # minutes=5
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=5),  # days=1
 }
